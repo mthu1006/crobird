@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">CroBird</string>
+    <string name="facebook_app_id">319062042155514</string>
+    <string name="fb_login_protocol_scheme">fb319062042155514</string>
+
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_phone">Phone number</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+
+    <array name="tag">
+        <item>Teacher</item>
+        <item>Developer</item>
+        <item>Engineer</item>
+        <item>Accounting</item>
+        <item>Banking</item>
+        <item>Consultant</item>
+        <item>Barista</item>
+        <item>Bartender</item>
+    </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
