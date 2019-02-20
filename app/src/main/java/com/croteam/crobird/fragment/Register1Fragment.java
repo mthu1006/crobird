@@ -19,10 +19,14 @@ import android.widget.RadioGroup;
 
 import com.croteam.crobird.R;
 import com.croteam.crobird.RegisterActivity;
+import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppTransaction;
 import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Validation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,10 +105,19 @@ public class Register1Fragment extends Fragment implements DatePickerDialog.OnDa
         }else if(Validation.checkNullOrEmpty(dob)){
             edtDOB.setError("You must enter date of birth!");
         }else {
-            Prefs.with(getActivity()).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 1);
-            ((RegisterActivity)getActivity()).stepView.go(1, true);
-            AppTransaction.replaceFragmentWithAnimation(getActivity().getSupportFragmentManager(), new Register2Fragment(), R.id.content);
+            updateInfo(name, dob);
         }
+    }
+
+    private void updateInfo(String name, String dob){
+        Map mParent = new HashMap();
+        mParent.put(User.PHONE, name);
+        mParent.put(User.DOB, dob);
+        mParent.put(User.STEP, 2);
+        ((RegisterActivity)getActivity()).db.push().setValue(mParent);
+        Prefs.with(getActivity()).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 1);
+        ((RegisterActivity)getActivity()).stepView.go(1, true);
+        AppTransaction.replaceFragmentWithAnimation(getActivity().getSupportFragmentManager(), new Register2Fragment(), R.id.content);
     }
 
     public void setImageAvatar(Bitmap bm){
