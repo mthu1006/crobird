@@ -78,6 +78,8 @@ public class Register2Fragment extends Fragment {
             }
         });
 
+        edtPhone.setText(Prefs.with(getActivity()).getString(AppConstants.PHONE_NUMBER));
+
     }
 
     private void validateData(){
@@ -92,6 +94,10 @@ public class Register2Fragment extends Fragment {
             edtPhone.setError("You must enter phone number!");
         }else {
             Prefs.with(getActivity()).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 2);
+            ((RegisterActivity)getActivity()).user.setEmail(mail);
+            ((RegisterActivity)getActivity()).user.setPhone(phone);
+            String str = ((RegisterActivity)getActivity()).user.toJSONObject().toString();
+            Prefs.with(getActivity()).putString(AppConstants.PREF_KEY_USER, str);
             ((RegisterActivity)getActivity()).stepView.go(2, true);
             AppTransaction.replaceFragmentWithAnimation(getActivity().getSupportFragmentManager(), new Register3Fragment(), R.id.content);
         }

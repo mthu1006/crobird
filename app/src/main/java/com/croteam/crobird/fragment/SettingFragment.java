@@ -16,6 +16,12 @@ import com.croteam.crobird.R;
 import com.croteam.crobird.adapter.ClickListener;
 import com.croteam.crobird.adapter.MenuAdapter;
 import com.croteam.crobird.model.CommonClass;
+import com.croteam.crobird.model.User;
+import com.croteam.crobird.uitls.AppConstants;
+import com.croteam.crobird.uitls.Prefs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -64,7 +70,21 @@ public class SettingFragment extends Fragment implements ClickListener {
         loadingDialog.setCanceledOnTouchOutside(false);
         initSettingList();
         initView();
+        initUser();
         return root;
+    }
+
+    private void initUser(){
+        tvPhone.setText(Prefs.with(getActivity()).getString(AppConstants.PHONE_NUMBER));
+        String str = Prefs.with(getActivity()).getString(AppConstants.PREF_KEY_USER);
+        try {
+            JSONObject obj = new JSONObject(str);
+            tvEmail.setText(obj.getString(User.EMAIL));
+            tvName.setText(obj.getString(User.NAME));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initSettingList(){

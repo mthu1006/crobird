@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity  {
         if(!Validation.checkNullOrEmpty(Prefs.with(this).getString(AppConstants.PHONE_NUMBER))){
             int progress = Prefs.with(LoginActivity.this).getInt(AppConstants.PREF_KEY_REGISTER_PROGRESS);
             Intent intent = null;
-            if(progress <= 4){
+            if(progress < 4){
                 intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
@@ -367,7 +367,8 @@ public class LoginActivity extends AppCompatActivity  {
         String phoneNumber = edtPhone.getText().toString();
         if(!Validation.checkNullOrEmpty(phoneNumber)){
             if(Utils.isNetworkOnline(this)) {
-                startPhoneNumberVerification(formatPhoneNumber(phoneNumber));
+//                startPhoneNumberVerification(formatPhoneNumber(phoneNumber));
+                getUserInfor(phoneNumber);
             }else Snackbar.make(btnLogin, "Vui lòng kết nối internet và thử lại!", Snackbar.LENGTH_SHORT).show();
         }else Snackbar.make(btnLogin, "Bạn chưa nhập số điện thoại!", Snackbar.LENGTH_SHORT).show();
 

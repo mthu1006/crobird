@@ -11,6 +11,7 @@ import com.croteam.crobird.fragment.Register1Fragment;
 import com.croteam.crobird.fragment.Register2Fragment;
 import com.croteam.crobird.fragment.Register3Fragment;
 import com.croteam.crobird.fragment.Register4Fragment;
+import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppTransaction;
 import com.croteam.crobird.uitls.Prefs;
@@ -28,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     public StepView stepView;
 
+    public User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         getSupportActionBar().hide();
-
+        user = new User();
         initStepView();
     }
 

@@ -110,11 +110,15 @@ public class Register1Fragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     private void updateInfo(String name, String dob){
-        Map mParent = new HashMap();
-        mParent.put(User.PHONE, name);
-        mParent.put(User.DOB, dob);
-        mParent.put(User.STEP, 2);
-        ((RegisterActivity)getActivity()).db.push().setValue(mParent);
+//        Map mParent = new HashMap();
+//        mParent.put(User.PHONE, name);
+//        mParent.put(User.DOB, dob);
+//        mParent.put(User.STEP, 2);
+//        ((RegisterActivity)getActivity()).db.push().setValue(mParent);
+        ((RegisterActivity)getActivity()).user.setName(name);
+        ((RegisterActivity)getActivity()).user.setDob(dob);
+        String str = ((RegisterActivity)getActivity()).user.toJSONObject().toString();
+        Prefs.with(getActivity()).putString(AppConstants.PREF_KEY_USER, str);
         Prefs.with(getActivity()).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 1);
         ((RegisterActivity)getActivity()).stepView.go(1, true);
         AppTransaction.replaceFragmentWithAnimation(getActivity().getSupportFragmentManager(), new Register2Fragment(), R.id.content);
