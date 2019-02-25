@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import com.croteam.crobird.MainActivity;
 import com.croteam.crobird.R;
+import com.croteam.crobird.RegisterActivity;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppTransaction;
 import com.croteam.crobird.uitls.Prefs;
@@ -53,6 +54,12 @@ public class Register4Fragment extends Fragment {
     }
 
     private void initViews(){
+        btnChooseFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RegisterActivity)getActivity()).showFileChooser();
+            }
+        });
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +67,10 @@ public class Register4Fragment extends Fragment {
                 AppTransaction.replaceActivityWithAnimation(getActivity(), MainActivity.class);
             }
         });
+    }
+
+    public void setFilePath(String path){
+        edtFilePath.setText(path);
     }
 
 }

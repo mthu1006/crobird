@@ -19,6 +19,8 @@ import com.croteam.crobird.model.CommonClass;
 import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.Prefs;
+import com.croteam.crobird.uitls.Utils;
+import com.croteam.crobird.uitls.Validation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.internal.Util;
 
 public class SettingFragment extends Fragment implements ClickListener {
 
@@ -83,6 +86,10 @@ public class SettingFragment extends Fragment implements ClickListener {
             tvName.setText(obj.getString(User.NAME));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        String photo = Prefs.with(getActivity()).getString(AppConstants.PREF_KEY_USER_PHOTO);
+        if(!Validation.checkNullOrEmpty(photo)){
+            imgProfile.setImageBitmap(Utils.base64ToBitmap(photo));
         }
 
     }

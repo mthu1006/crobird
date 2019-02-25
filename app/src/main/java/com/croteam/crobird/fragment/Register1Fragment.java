@@ -23,6 +23,7 @@ import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppTransaction;
 import com.croteam.crobird.uitls.Prefs;
+import com.croteam.crobird.uitls.Utils;
 import com.croteam.crobird.uitls.Validation;
 
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.internal.Util;
 
 
 public class Register1Fragment extends Fragment implements DatePickerDialog.OnDateSetListener {
@@ -47,6 +49,7 @@ public class Register1Fragment extends Fragment implements DatePickerDialog.OnDa
 
     private DatePickerDialog datePickerDialog;
     private Bitmap photo;
+    private String base64photo = "";
 
 
     public Register1Fragment() {
@@ -118,6 +121,7 @@ public class Register1Fragment extends Fragment implements DatePickerDialog.OnDa
         ((RegisterActivity)getActivity()).user.setName(name);
         ((RegisterActivity)getActivity()).user.setDob(dob);
         String str = ((RegisterActivity)getActivity()).user.toJSONObject().toString();
+        Prefs.with(getActivity()).putString(AppConstants.PREF_KEY_USER_PHOTO, base64photo);
         Prefs.with(getActivity()).putString(AppConstants.PREF_KEY_USER, str);
         Prefs.with(getActivity()).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 1);
         ((RegisterActivity)getActivity()).stepView.go(1, true);
@@ -126,6 +130,7 @@ public class Register1Fragment extends Fragment implements DatePickerDialog.OnDa
 
     public void setImageAvatar(Bitmap bm){
         imgProfile.setImageBitmap(bm);
+        base64photo = Utils.bitmapToBase64(bm);
     }
 
     @Override

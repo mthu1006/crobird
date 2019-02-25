@@ -27,6 +27,7 @@ public class AppConstants {
     public static final String API_KEY = "AIzaSyCdkCxjgp_vRWsvBuUSA5b6JFGcyvTOwsQ";
     public static final String PHONE_NUMBER = "phone_number";
     public static final String PREF_KEY_USER = "user_str";
+    public static final String PREF_KEY_USER_PHOTO = "user_photo";
     public static final String PREF_KEY_REGISTER_PROGRESS = "register_progress";
     public static final String IS_LOGGED_KEY = "is_logged";
 

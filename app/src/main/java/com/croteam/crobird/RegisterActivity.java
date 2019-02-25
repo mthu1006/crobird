@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.croteam.crobird.fragment.Register1Fragment;
 import com.croteam.crobird.fragment.Register2Fragment;
@@ -18,7 +20,10 @@ import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Utils;
 import com.shuhart.stepview.StepView;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import io.realm.internal.Util;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -26,10 +31,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Bitmap photo;
     Register1Fragment register1Fragment;
+    Register4Fragment register4Fragment;
 
     public StepView stepView;
 
     public User user;
+
+    private static final int FILE_SELECT_CODE = 2;
+
 
 
     @Override
@@ -44,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initStepView(){
         register1Fragment = new Register1Fragment();
+        register4Fragment = new Register4Fragment();
         stepView = findViewById(R.id.step_view);
         stepView.getState().steps(new ArrayList<String>() {{
             add("");
@@ -56,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(step==1) AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), register1Fragment, R.id.content);
         else if(step == 2)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), new Register2Fragment(), R.id.content);
         else if(step == 3)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), new Register3Fragment(), R.id.content);
-        else if(step == 4)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), new Register4Fragment(), R.id.content);
+        else if(step == 4)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), register4Fragment, R.id.content);
     }
 
 
@@ -71,6 +81,22 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(pickPhoto, 1);//one can be replaced with any action code
     }
 
+    public void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch (requestCode) {
@@ -81,7 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
                         register1Fragment.setImageAvatar(photo);
                     }
                 }
-
                 break;
             case 1:
                 if (resultCode == RESULT_OK) {
@@ -90,6 +115,26 @@ public class RegisterActivity extends AppCompatActivity {
                     if(photo!=null) {
                         register1Fragment.setImageAvatar(photo);
                     }
+                }
+                break;
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = imageReturnedIntent.getData();
+                    Log.d(AppConstants.TAG, "File Uri: " + uri.toString());
+                    // Get the path
+                    String path = null;
+                    try {
+                        path = Utils.getPath(this, uri);
+                        Log.d(AppConstants.TAG, "File Path: " + path);
+                        register4Fragment.setFilePath(path);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
                 }
                 break;
         }
