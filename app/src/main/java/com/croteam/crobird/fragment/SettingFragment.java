@@ -1,6 +1,7 @@
 package com.croteam.crobird.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.croteam.crobird.ProfileActivity;
 import com.croteam.crobird.R;
 import com.croteam.crobird.adapter.ClickListener;
 import com.croteam.crobird.adapter.MenuAdapter;
@@ -118,13 +120,13 @@ public class SettingFragment extends Fragment implements ClickListener {
 //            }
 //        });
 //
-//        imgProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
