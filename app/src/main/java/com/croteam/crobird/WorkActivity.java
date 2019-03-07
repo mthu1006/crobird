@@ -62,6 +62,7 @@ public class WorkActivity extends AppCompatActivity {
     }
 
     private void initCro(){
+        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Healthy caring"};
         String[] firstNames = new String[]{"Nguyen", "Tran", "Le", "Lam", "Phan", "Pham", "Vo", "Vu", "Thai"};
         String[] middleNames = new String[]{"Van", "Hoang", "Thi", "Thu", "Thanh", "Minh", "Ngoc"};
         String[] lastNames = new String[]{"Thao", "Hieu", "Thu", "Mai", "Phuong", "Van", "Hang", "Han", "Nhu", };
@@ -71,6 +72,7 @@ public class WorkActivity extends AppCompatActivity {
                     +" " +lastNames[Utils.randomWithRange(0, lastNames.length-1)]);
             user.setGender(Utils.randomWithRange(0,1)==1);
             user.setDob("01/01/1990");
+            user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
             user.setPrice(Utils.randomWithRange(5, 30));
             user.setRating(Utils.randomWithRange(1, 5));
             list.add(user);

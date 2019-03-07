@@ -1,8 +1,8 @@
 package com.croteam.crobird;
 
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +24,8 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView imgBackdrop;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.img_toolbar)
     ImageView imgToolbar;
     @BindView(R.id.tv_title)
@@ -34,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
         initUser();
     }
 

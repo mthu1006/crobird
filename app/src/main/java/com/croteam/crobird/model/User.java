@@ -15,7 +15,7 @@ public class User extends RealmObject implements Serializable {
 
     @PrimaryKey
     private String id;
-    private String username, password, name, dob, phone, email;
+    private String username, password, name, dob, phone, email, job;
     private boolean gender;
     private double price;
     private float rating;
@@ -27,6 +27,7 @@ public class User extends RealmObject implements Serializable {
     public static String DOB = "dob";
     public static String PHONE = "phone";
     public static String EMAIL = "email";
+    public static String JOB = "job";
     public static String GENDER = "gender";
     public static String PRICE = "price";
     public static String RATING = "rating";
@@ -104,6 +105,14 @@ public class User extends RealmObject implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public boolean isGender() {
