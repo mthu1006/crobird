@@ -231,6 +231,11 @@ public class Utils {
         return Double.valueOf(twoDForm.format(d));
     }
 
+    public static double round (double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
+    }
+
     public static String getAddressFromLatlng(Context context, double latitude, double longitude){
         Geocoder geocoder;
         List<Address> addresses;

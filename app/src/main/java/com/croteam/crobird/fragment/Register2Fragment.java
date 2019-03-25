@@ -2,6 +2,7 @@ package com.croteam.crobird.fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +18,13 @@ import com.croteam.crobird.uitls.AppTransaction;
 import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Validation;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +36,20 @@ public class Register2Fragment extends Fragment {
         // Required empty public constructor
     }
 
+    PlacesClient placesClient;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Places.initialize(getActivity().getApplicationContext(), getActivity().getString(R.string.google_maps_key));
+        placesClient = Places.createClient(getActivity());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     @BindView(R.id.edt_contact)
     EditText edtContact;
     @BindView(R.id.edt_email)
@@ -40,7 +59,7 @@ public class Register2Fragment extends Fragment {
     @BindView(R.id.btn_next)
     Button btnNext;
 
-    private PlaceAutocompleteFragment autocompleteFragment;
+    private AutocompleteSupportFragment autocompleteFragment;
     private EditText autocompleteEdt;
 
     @Override
@@ -50,22 +69,26 @@ public class Register2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_register2, container, false);
         ButterKnife.bind(this, view);
 
+
         initViews();
         return view;
     }
 
     private void initViews(){
-        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (AutocompleteSupportFragment ) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Address");
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-
+                // TODO: Get info about the selected place.
+                Log.i(AppConstants.TAG, "Place: " + place.getName() + ", " + place.getId());
             }
 
             @Override
             public void onError(Status status) {
-                Log.d(AppConstants.TAG, "An error occurred: " + status);
+                // TODO: Handle the error.
+                Log.i(AppConstants.TAG, "An error occurred: " + status);
             }
         });
 

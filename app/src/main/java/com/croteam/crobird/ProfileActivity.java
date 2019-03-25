@@ -1,10 +1,10 @@
 package com.croteam.crobird;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
@@ -22,14 +22,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.backdrop)
     ImageView imgBackdrop;
-    @BindView(R.id.tv_name)
-    TextView tvName;
+//    @BindView(R.id.tv_name)
+//    TextView tvName;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.img_toolbar)
-    ImageView imgToolbar;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
+    @BindView(R.id.collapsingToolbarLayout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+//    @BindView(R.id.img_toolbar)
+//    ImageView imgToolbar;
+//    @BindView(R.id.tv_title)
+//    TextView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
         initUser();
     }
 
@@ -44,16 +47,17 @@ public class ProfileActivity extends AppCompatActivity {
         String str = Prefs.with(this).getString(AppConstants.PREF_KEY_USER);
         try {
             JSONObject obj = new JSONObject(str);
+            collapsingToolbarLayout.setTitle(obj.getString(User.NAME));
 //            tvEmail.setText(obj.getString(User.EMAIL));
-            tvName.setText(obj.getString(User.NAME));
-            tvTitle.setText(obj.getString(User.NAME));
+//            tvName.setText(obj.getString(User.NAME));
+//            tvTitle.setText(obj.getString(User.NAME));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String photo = Prefs.with(this).getString(AppConstants.PREF_KEY_USER_PHOTO);
         if(!Validation.checkNullOrEmpty(photo)){
             imgBackdrop.setImageBitmap(Utils.base64ToBitmap(photo));
-            imgToolbar.setImageBitmap(Utils.base64ToBitmap(photo));
+//            imgToolbar.setImageBitmap(Utils.base64ToBitmap(photo));
         }
 
     }

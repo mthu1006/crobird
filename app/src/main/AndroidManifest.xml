@@ -45,7 +45,7 @@
         android:required="true" />
     <uses-feature
         android:name="android.hardware.fingerprint"
-        android:required="true" />
+        android:required="false" />
 
     <application
         android:name=".CroBirdApplication"
@@ -55,9 +55,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CroDetailActivity"></activity>
+
+        <activity android:name=".SearchResultActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".CroDetailActivity"
+            android:parentActivityName=".WorkActivity"
+            android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".ProfileActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeNoActionBar" />
 
         <meta-data
@@ -66,6 +73,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.places.API_KEY"
+            android:value="@string/google_maps_key"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -96,7 +106,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />

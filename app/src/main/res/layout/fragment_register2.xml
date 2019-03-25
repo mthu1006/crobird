@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space10"
                 android:background="@drawable/bg_input"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
         </LinearLayout>
 
     </LinearLayout>

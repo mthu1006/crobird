@@ -10,6 +10,7 @@ import com.google.firebase.FirebaseApp;
 
 import io.realm.Realm;
 
+
 public class CroBirdApplication extends Application {
 
     protected void attachBaseContext(Context base) {

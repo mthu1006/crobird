@@ -5,11 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.croteam.crobird.R;
 import com.croteam.crobird.model.User;
+import com.croteam.crobird.uitls.Validation;
 
 import java.util.ArrayList;
 
@@ -21,18 +25,22 @@ public class BirdAdapter extends RecyclerView.Adapter<BirdAdapter.MyViewHolder> 
     private ClickListener clickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, rating, price;
+        public TextView name, rating, price, job;
         public RatingBar ratingBar;
-//        public ImageView img;
+        public RelativeLayout viewBackground, viewForeground;
+        public ImageView img;
 
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.tv_name);
+            job = (TextView) view.findViewById(R.id.tv_job);
             rating = (TextView) view.findViewById(R.id.tv_rating);
             ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
             price = (TextView) view.findViewById(R.id.tv_price);
-//            img = (ImageView) view.findViewById(R.id.icon);
+            viewBackground = view.findViewById(R.id.view_background);
+            viewForeground = view.findViewById(R.id.view_foreground);
+            img = (ImageView) view.findViewById(R.id.img_profile);
         }
     }
 
@@ -56,10 +64,12 @@ public class BirdAdapter extends RecyclerView.Adapter<BirdAdapter.MyViewHolder> 
         final User user = list.get(position);
 
         holder.name.setText(user.getName());
+        holder.job.setText(user.getJob());
         holder.ratingBar.setRating(user.getRating());
         holder.price.setText("$"+user.getPrice()+" USD/Hour");
 //        holder.img.setImageResource(menu.getNum1());
-
+        if(!Validation.checkNullOrEmpty(user.getImg()))
+            Glide.with(context).load(user.getImg()).into(holder.img);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

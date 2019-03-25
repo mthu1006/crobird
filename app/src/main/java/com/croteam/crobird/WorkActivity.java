@@ -1,15 +1,24 @@
 package com.croteam.crobird;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,17 +27,23 @@ import android.widget.TextView;
 import com.croteam.crobird.adapter.BirdAdapter;
 import com.croteam.crobird.adapter.ClickListener;
 import com.croteam.crobird.adapter.ViewPagerAdapter;
+import com.croteam.crobird.component.RecyclerItemTouchHelper;
+import com.croteam.crobird.database.RealmController;
+import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdFragment;
 import com.croteam.crobird.fragment.CroFragment;
+import com.croteam.crobird.model.Category;
 import com.croteam.crobird.model.User;
-import com.croteam.crobird.uitls.Utils;
+import com.croteam.crobird.uitls.AppConstants;
+import com.croteam.crobird.uitls.Validation;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
-public class WorkActivity extends AppCompatActivity {
+public class WorkActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     public ViewPager viewPager;
     private TabLayout tabLayout;
@@ -38,19 +53,35 @@ public class WorkActivity extends AppCompatActivity {
     @BindView(R.id.rv)
     public RecyclerView rvBird;
     private ArrayList<User> list;
-
+    private ArrayList<User> listSearch;
+    private String categoryName;
+    private BirdAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work);
         ButterKnife.bind(this);
-        String title = getIntent().getStringExtra("name");
-        getSupportActionBar().setTitle(title);
-        list = new ArrayList<>();
+        categoryName = getIntent().getStringExtra(Category.NAME);
+        getSupportActionBar().setTitle(categoryName);
         initViews();
-        initCro();
+        initData();
 //        setupViewPager();
+    }
+
+    private void performSearch(String key){
+        listSearch.clear();
+        if(!Validation.checkNullOrEmpty(key)) {
+            RealmResults<User> results = UserHelper.with(this).searchUserByCategory(categoryName, key);
+            for (User obj : results) {
+                listSearch.add(obj);
+            }
+            adapter.notifyDataSetChanged();
+        }else {
+            listSearch.addAll(list);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     private void initViews(){
@@ -59,28 +90,59 @@ public class WorkActivity extends AppCompatActivity {
         rvBird.setLayoutManager(mLayoutManager);
         rvBird.setItemAnimator(new DefaultItemAnimator());
 
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Log.d(AppConstants.TAG, "search");
+                    performSearch(edtSearch.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (Validation.checkNullOrEmpty(edtSearch.getText().toString())){
+                    listSearch.clear();
+                    listSearch.addAll(list);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
-    private void initCro(){
-        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Healthy caring"};
-        String[] firstNames = new String[]{"Nguyen", "Tran", "Le", "Lam", "Phan", "Pham", "Vo", "Vu", "Thai"};
-        String[] middleNames = new String[]{"Van", "Hoang", "Thi", "Thu", "Thanh", "Minh", "Ngoc"};
-        String[] lastNames = new String[]{"Thao", "Hieu", "Thu", "Mai", "Phuong", "Van", "Hang", "Han", "Nhu", };
-        for(int i=0; i<100; i++){
-            User user = new User();
-            user.setName(firstNames[Utils.randomWithRange(0, firstNames.length-1)]+" "+middleNames[Utils.randomWithRange(0, middleNames.length-1)]
-                    +" " +lastNames[Utils.randomWithRange(0, lastNames.length-1)]);
-            user.setGender(Utils.randomWithRange(0,1)==1);
-            user.setDob("01/01/1990");
-            user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
-            user.setPrice(Utils.randomWithRange(5, 30));
-            user.setRating(Utils.randomWithRange(1, 5));
-            list.add(user);
+    private void initData(){
+        list = new ArrayList<>();
+        listSearch = new ArrayList<>();
+        Log.d(AppConstants.TAG, "categoryName " + categoryName);
+        RealmResults<Object> results = RealmController.with(this).queryObjects(User.class, User.JOB, categoryName);
+        Log.d(AppConstants.TAG, "results length " + results.size());
+        for(Object obj: results){
+            list.add((User)obj);
         }
-        BirdAdapter adapter = new BirdAdapter(this, list, new ClickListener() {
+        listSearch.clear();
+        listSearch.addAll(list);
+
+        adapter = new BirdAdapter(this, listSearch, new ClickListener() {
             @Override
             public void onItemClick(View v) {
-
+                Intent intent = new Intent(WorkActivity.this, CroDetailActivity.class);
+                intent.putExtra(User.ID, list.get((int)v.getTag()).getId());
+                startActivity(intent);
             }
 
             @Override
@@ -90,8 +152,9 @@ public class WorkActivity extends AppCompatActivity {
         });
         rvBird.setAdapter(adapter);
 
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvBird);
     }
-
 
     private void setupViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -151,5 +214,23 @@ public class WorkActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        String name = listSearch.get(viewHolder.getAdapterPosition()).getName();
+        if(!MainActivity.cartList.contains(listSearch.get(position))) {
+            MainActivity.cartList.add(listSearch.get(position));
+            Log.d(AppConstants.TAG, "MainActivity.cartList size "+MainActivity.cartList.size());
+            Snackbar snackbar = Snackbar
+                    .make(rvBird, name + " is added to cart!", Snackbar.LENGTH_LONG);
+
+            snackbar.setActionTextColor(Color.GREEN);
+            snackbar.show();
+            listSearch.remove(position);
+            adapter.notifyDataSetChanged();
+        }else {
+            Snackbar.make(rvBird, name + "has already added to cart", Snackbar.LENGTH_LONG).show();
+        }
     }
 }

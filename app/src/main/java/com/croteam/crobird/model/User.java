@@ -15,12 +15,15 @@ public class User extends RealmObject implements Serializable {
 
     @PrimaryKey
     private String id;
-    private String username, password, name, dob, phone, email, job;
+    private String username, password, name, dob, phone, email, job, address, searchKey, img;
     private boolean gender;
     private double price;
-    private float rating;
+    private float rating, lng, lat;
+    private int index;
 
     public static String ID = "id";
+    public static String INDEX = "index";
+    public static String IMG = "img";
     public static String USERNAME = "username";
     public static String PASSWORD = "password";
     public static String NAME = "name";
@@ -31,6 +34,10 @@ public class User extends RealmObject implements Serializable {
     public static String GENDER = "gender";
     public static String PRICE = "price";
     public static String RATING = "rating";
+    public static String ADDRESS = "address";
+    public static String LONGITUDE = "lng";
+    public static String LATITUDE = "lat";
+    public static String SEARCH_KEY = "searchKey";
 
     public JSONObject toJSONObject(){
         JSONObject obj = new JSONObject();
@@ -57,6 +64,22 @@ public class User extends RealmObject implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getUsername() {
@@ -137,5 +160,37 @@ public class User extends RealmObject implements Serializable {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public String getSearchKey() {
+        return searchKey;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
     }
 }

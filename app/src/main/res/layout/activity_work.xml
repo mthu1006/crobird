@@ -26,6 +26,7 @@
         android:layout_margin="@dimen/space10"
         android:background="@drawable/bg_input"
         android:drawableEnd="@drawable/places_ic_search"
+        android:imeOptions="actionSearch"
         android:ems="10"
         android:hint="Search"
         android:inputType="text" />

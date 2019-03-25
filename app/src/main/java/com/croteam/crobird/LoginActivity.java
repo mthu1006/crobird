@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.croteam.crobird.database.RealmController;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppDialogManager;
 import com.croteam.crobird.uitls.DialogAcceptClickListener;
@@ -40,6 +41,8 @@ import butterknife.ButterKnife;
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * A login screen that offers login via email/password.
@@ -71,12 +74,21 @@ public class LoginActivity extends AppCompatActivity  {
     private int STATE_RESEND_OTP = 5;
     private Dialog mLoadingDialog;
 
+    private Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        try {
+            realm = RealmController.with(LoginActivity.this).getRealm();
+        }catch (Exception e){
+            RealmConfiguration realmConfig = Realm.getDefaultConfiguration();
+            Realm.deleteRealm(realmConfig);
+            realm = RealmController.with(LoginActivity.this).getRealm();
+        }
         initViews();
         initFirebaseAuth();
         initOTPDialog();
