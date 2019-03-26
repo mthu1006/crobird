@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.croteam.crobird.MainActivity;
 import com.croteam.crobird.ProfileActivity;
 import com.croteam.crobird.R;
 import com.croteam.crobird.adapter.ClickListener;
@@ -81,14 +82,16 @@ public class SettingFragment extends Fragment implements ClickListener {
 
     private void initUser(){
         tvPhone.setText(Prefs.with(getActivity()).getString(AppConstants.PHONE_NUMBER));
-        String str = Prefs.with(getActivity()).getString(AppConstants.PREF_KEY_USER);
-        try {
-            JSONObject obj = new JSONObject(str);
-            tvEmail.setText(obj.getString(User.EMAIL));
-            tvName.setText(obj.getString(User.NAME));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        String str = Prefs.with(getActivity()).getString(AppConstants.PREF_KEY_USER);
+//        try {
+//            JSONObject obj = new JSONObject(str);
+//            tvEmail.setText(obj.getString(User.EMAIL));
+//            tvName.setText(obj.getString(User.NAME));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        tvEmail.setText(((MainActivity)getActivity()).user.getEmail());
+        tvName.setText(((MainActivity)getActivity()).user.getName());
         String photo = Prefs.with(getActivity()).getString(AppConstants.PREF_KEY_USER_PHOTO);
         if(!Validation.checkNullOrEmpty(photo)){
             imgProfile.setImageBitmap(Utils.base64ToBitmap(photo));

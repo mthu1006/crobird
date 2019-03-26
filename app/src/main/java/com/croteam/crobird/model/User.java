@@ -17,8 +17,8 @@ public class User extends RealmObject implements Serializable {
     private String id;
     private String username, password, name, dob, phone, email, job, address, searchKey, img;
     private boolean gender;
-    private double price;
-    private float rating, lng, lat;
+    private double price, lng, lat;
+    private float rating;
     private int index;
 
     public static String ID = "id";
@@ -170,19 +170,19 @@ public class User extends RealmObject implements Serializable {
         this.address = address;
     }
 
-    public float getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(float lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 

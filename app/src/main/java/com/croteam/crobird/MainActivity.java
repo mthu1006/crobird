@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.croteam.crobird.adapter.ViewPagerAdapter;
 import com.croteam.crobird.database.RealmController;
+import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdCartFragment;
 import com.croteam.crobird.fragment.MainFragment;
 import com.croteam.crobird.fragment.SettingFragment;
@@ -22,15 +23,21 @@ import com.croteam.crobird.model.Category;
 import com.croteam.crobird.model.CommonClass;
 import com.croteam.crobird.model.Rating;
 import com.croteam.crobird.model.User;
+import com.croteam.crobird.uitls.AppConstants;
+import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Utils;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+
+import io.realm.internal.Util;
 
 public class MainActivity extends AppCompatActivity {
 
     public ViewPager viewPager;
     private TabLayout tabLayout;
     boolean doubleBackToExitPressedOnce = false;
+    public User user;
 
     public static ArrayList<User> cartList;
 
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         cartList = new ArrayList<>();
+        user = UserHelper.with(this).getUserByPhone(Prefs.with(this).getString(AppConstants.PHONE_NUMBER));
         initCatogories();
         initCro();
         setupViewPager();
@@ -90,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
             user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
             user.setPrice(Utils.randomWithRange(5, 30));
             user.setImg(avatars.get(Utils.randomWithRange(0, avatars.size()-1)));
+            LatLng latLng = Utils.getLocation(user.getLat(), user.getLng(), 2);
+            user.setLat(latLng.latitude);
+            user.setLng(latLng.longitude);
+            user.setAddress(Utils.getAddressFromLatlng(this, latLng.latitude, latLng.longitude));
             int count = Utils.randomWithRange(5, 20);
             float rate = 0;
             for(int r = 0; r<count; r++) {

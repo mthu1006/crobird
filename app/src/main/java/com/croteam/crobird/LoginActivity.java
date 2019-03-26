@@ -1,11 +1,17 @@
 package com.croteam.crobird;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +20,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.croteam.crobird.database.RealmController;
+import com.croteam.crobird.database.UserHelper;
+import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.AppDialogManager;
 import com.croteam.crobird.uitls.DialogAcceptClickListener;
@@ -32,6 +40,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.mukesh.OtpListener;
 import com.mukesh.OtpView;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +83,8 @@ public class LoginActivity extends AppCompatActivity  {
     private int STATE_RESEND_OTP = 5;
     private Dialog mLoadingDialog;
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     private Realm realm;
 
     @Override
@@ -81,6 +92,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        checkLocationPermission();
         getSupportActionBar().hide();
         try {
             realm = RealmController.with(LoginActivity.this).getRealm();
@@ -246,6 +258,14 @@ public class LoginActivity extends AppCompatActivity  {
     private void getUserInfor(final String phone) {
         Prefs.with(this).putString(AppConstants.PHONE_NUMBER, phone);
         Prefs.with(this).putInt(AppConstants.PREF_KEY_REGISTER_PROGRESS, 1);
+        if(!RealmController.with(this).getRealm().isInTransaction()) RealmController.with(this).getRealm().beginTransaction();
+        if(UserHelper.with(this).getUserByPhone(phone) == null){
+            User user = new User();
+            user.setId("user"+Calendar.getInstance().getTime().toString());
+            user.setPhone(phone);
+            RealmController.with(this).getRealm().copyToRealmOrUpdate(user);
+        }
+        RealmController.with(this).getRealm().commitTransaction();
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
         finish();
@@ -386,7 +406,47 @@ public class LoginActivity extends AppCompatActivity  {
 
     }
 
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permisstion")
+                        .setMessage("Ứng dụng cần sử dụng vị trí")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(LoginActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+//            if(address==null)
+//                initMap();
+            return true;
+        }
+    }
 
 }
 

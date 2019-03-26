@@ -39,8 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final int FILE_SELECT_CODE = 2;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +66,6 @@ public class RegisterActivity extends AppCompatActivity {
         else if(step == 3)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), new Register3Fragment(), R.id.content);
         else if(step == 4)AppTransaction.replaceFragmentWithAnimation(getSupportFragmentManager(), register4Fragment, R.id.content);
     }
-
 
     public void takePictureFromCamera() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -139,6 +136,5 @@ public class RegisterActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 }
