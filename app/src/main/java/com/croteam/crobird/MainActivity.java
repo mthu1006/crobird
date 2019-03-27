@@ -19,6 +19,7 @@ import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdCartFragment;
 import com.croteam.crobird.fragment.MainFragment;
 import com.croteam.crobird.fragment.SettingFragment;
+import com.croteam.crobird.model.BirdCart;
 import com.croteam.crobird.model.Category;
 import com.croteam.crobird.model.CommonClass;
 import com.croteam.crobird.model.Rating;
@@ -30,16 +31,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-import io.realm.internal.Util;
-
 public class MainActivity extends AppCompatActivity {
 
     public ViewPager viewPager;
     private TabLayout tabLayout;
     boolean doubleBackToExitPressedOnce = false;
-    public User user;
+    public static User user;
 
-    public static ArrayList<User> cartList;
+    public static ArrayList<BirdCart> cartList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +48,15 @@ public class MainActivity extends AppCompatActivity {
         cartList = new ArrayList<>();
         user = UserHelper.with(this).getUserByPhone(Prefs.with(this).getString(AppConstants.PHONE_NUMBER));
         initCatogories();
-        initCro();
+        if(RealmController.with(this).getAllList(User.class).size()<2)
+            initCro();
         setupViewPager();
 
     }
 
     private void initCatogories(){
         if(!RealmController.with(this).getRealm().isInTransaction()) RealmController.with(this).getRealm().beginTransaction();
-        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Healthy caring"};
+        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Health caring"};
         for(int i=0; i<names.length; i++){
             Category category = new Category(String.valueOf(i), names[i], "https://image.flaticon.com/icons/png/512/190/190684.png");
             CommonClass c9 = new CommonClass(names[i], R.drawable.ic_engineer);
@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCro(){
         if(!RealmController.with(this).getRealm().isInTransaction()) RealmController.with(this).getRealm().beginTransaction();
-        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Healthy caring"};
+        String[] names = {"Engineering", "Cleansing", "Teaching", "Saling", "Marketing", "Publishing", "Farming", "Computing", "Health caring"};
         String[] firstNames = new String[]{"Nguyen", "Tran", "Le", "Lam", "Phan", "Pham", "Vo", "Vu", "Thai"};
         String[] middleNames = new String[]{"Van", "Hoang", "Thi", "Thu", "Thanh", "Minh", "Ngoc"};
-        String[] lastNames = new String[]{"Thao", "Hieu", "Thu", "Mai", "Phuong", "Van", "Hang", "Han", "Nhu", };
+        String[] lastNames = new String[]{"Thao", "Hieu", "Thu", "Mai", "Phuong", "Van", "Hang", "Han", "Nhu", "Quynh"};
         String[] comments = new String[]{"Hard working", "Great!", "Not bad", "Not good", "Very good", "Very bad", "Terrible"};
         ArrayList<String> avatars = new ArrayList<>();
         avatars.add("https://i.pinimg.com/originals/72/eb/b6/72ebb6e15a76ac319e7275d8cb2d6626.jpg");
@@ -98,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
             user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
             user.setPrice(Utils.randomWithRange(5, 30));
             user.setImg(avatars.get(Utils.randomWithRange(0, avatars.size()-1)));
-            LatLng latLng = Utils.getLocation(user.getLat(), user.getLng(), 2);
+            LatLng latLng = Utils.getRandomLocation(new LatLng(this.user.getLat(), this.user.getLng()), Utils.randomWithRange(1, 10)*1000);
+            String address = Utils.getAddressFromLatlng(this, latLng.latitude, latLng.longitude);
+//            Log.d(AppConstants.TAG, "Latitude: "+latLng.latitude+" Longitude: " + latLng.longitude + " Address: "+address);
             user.setLat(latLng.latitude);
             user.setLng(latLng.longitude);
-            user.setAddress(Utils.getAddressFromLatlng(this, latLng.latitude, latLng.longitude));
+            user.setAddress(address);
             int count = Utils.randomWithRange(5, 20);
             float rate = 0;
             for(int r = 0; r<count; r++) {
