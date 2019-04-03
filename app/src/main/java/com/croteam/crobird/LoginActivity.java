@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mukesh.OtpListener;
 import com.mukesh.OtpView;
 
@@ -86,12 +87,14 @@ public class LoginActivity extends AppCompatActivity  {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     private Realm realm;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        db = FirebaseFirestore.getInstance();
         checkLocationPermission();
         getSupportActionBar().hide();
         try {

@@ -1,52 +1,41 @@
 {
   "project_info": {
-    "project_number": "1028509477014",
-    "firebase_url": "https://cro-bird.firebaseio.com",
-    "project_id": "cro-bird",
-    "storage_bucket": "cro-bird.appspot.com"
+    "project_number": "1014345298556",
+    "firebase_url": "https://crobird.firebaseio.com",
+    "project_id": "crobird",
+    "storage_bucket": "crobird.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1028509477014:android:56851df6b65efbbd",
+        "mobilesdk_app_id": "1:1014345298556:android:56851df6b65efbbd",
         "android_client_info": {
           "package_name": "com.croteam.crobird"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1028509477014-uplcq2igt43iqb0h9f9ni23nakmsel52.apps.googleusercontent.com",
+          "client_id": "1014345298556-p2dmv9ok61or9j4evjen8d3q8r5446ac.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.croteam.crobird",
             "certificate_hash": "edeb078189baac72c1a7740ad91217ee96f6a27d"
           }
-        },
-        {
-          "client_id": "1028509477014-4afhd6d59vnvusqgf9uvqb42r2qe16ds.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCT5wE6eXo2iwYN7OWdxI33n2t_l-rNhuo"
+          "current_key": "AIzaSyBQWMdON76Wjy1Z2V-kPf2_NGokVQQGD4s"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "1028509477014-4afhd6d59vnvusqgf9uvqb42r2qe16ds.apps.googleusercontent.com",
+              "client_id": "1014345298556-othoqufpbchpipv4altimhiqkduceupn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

@@ -3,9 +3,11 @@ package com.croteam.crobird;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,8 +29,13 @@ import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Utils;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import io.realm.internal.Util;
 
@@ -38,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     boolean doubleBackToExitPressedOnce = false;
     public User user;
+    FirebaseFirestore db;
 
     public static ArrayList<User> cartList;
 
@@ -46,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        db = FirebaseFirestore.getInstance();
         cartList = new ArrayList<>();
         user = UserHelper.with(this).getUserByPhone(Prefs.with(this).getString(AppConstants.PHONE_NUMBER));
         initCatogories();
@@ -121,6 +130,23 @@ public class MainActivity extends AppCompatActivity {
             String key = user.getName()+"-"+user.getPhone()+"-"+user.getJob();
             user.setSearchKey(key.toLowerCase());
             RealmController.with(this).getRealm().copyToRealmOrUpdate(user);
+            HashMap map = user.toHashMap();
+
+            db.collection(User.class.getSimpleName())
+                    .add(map)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(AppConstants.TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(AppConstants.TAG, "Error adding document", e);
+                        }
+                    });
+
 //            list.add(user);
         }
         RealmController.with(this).getRealm().commitTransaction();
