@@ -6,6 +6,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import com.croteam.crobird.R;
 
 /**
  * Created by kien on 29-Aug-16.
@@ -99,23 +103,23 @@ public class AppDialogManager {
 //            });
 //        }
 
-//        Button btn = (Button) view.findViewById(R.id.btn_accept);
-//        ImageView img_close = (ImageView) view.findViewById(R.id.img_close);
-//        if(img_close!=null)
-//        img_close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mclick.onCloseClick(v);
-//                dialog.dismiss();
-//            }
-//        });
-//        if(btn!=null)
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mclick.onAcceptClick(v);
-//            }
-//        });
+        Button btn = (Button) view.findViewById(R.id.btn_accept);
+        ImageView img_close = (ImageView) view.findViewById(R.id.img_close);
+        if(img_close!=null)
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mclick.onCloseClick(v);
+                dialog.dismiss();
+            }
+        });
+        if(btn!=null)
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mclick.onAcceptClick(v);
+            }
+        });
         return dialog;
     }
 }

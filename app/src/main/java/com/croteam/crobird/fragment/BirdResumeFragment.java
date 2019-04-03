@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.croteam.crobird.CroDetailActivity;
+import com.croteam.crobird.MainActivity;
 import com.croteam.crobird.R;
 import com.croteam.crobird.uitls.AppConstants;
+import com.croteam.crobird.uitls.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -76,6 +78,9 @@ public class BirdResumeFragment extends Fragment implements OnMapReadyCallback, 
         tvPhone.setText(((CroDetailActivity)getActivity()).user.getPhone());
         tvDob.setText(((CroDetailActivity)getActivity()).user.getDob());
         tvAddress.setText(((CroDetailActivity)getActivity()).user.getAddress());
+
+        float distance = Utils.distanceBetween(MainActivity.user.getLat(), MainActivity.user.getLng(), ((CroDetailActivity)getActivity()).user.getLat(), ((CroDetailActivity)getActivity()).user.getLng());
+        tvDistance.setText(String.valueOf(Math.ceil(distance/1000)) + " km");
     }
 
     private void  moveCameraTo(Location location){
@@ -87,6 +92,36 @@ public class BirdResumeFragment extends Fragment implements OnMapReadyCallback, 
                 .defaultMarker(BitmapDescriptorFactory.HUE_RED));
         gmap.addMarker(markerOptions);
         gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+    }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        mapView.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override

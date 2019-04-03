@@ -2,7 +2,6 @@ package com.croteam.crobird.fragment;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -138,7 +137,7 @@ public class Register2Fragment extends Fragment {
             user.setPhone(phone);
             user.setAddress(_place.getAddress());
             user.setLat(_place.getLatLng().latitude);
-            user.setLat(_place.getLatLng().longitude);
+            user.setLng(_place.getLatLng().longitude);
             RealmController.with(this).getRealm().copyToRealmOrUpdate(user);
             RealmController.with(this).getRealm().commitTransaction();
 
