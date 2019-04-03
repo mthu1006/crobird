@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
             user.setPrice(Utils.randomWithRange(5, 30));
             user.setImg(avatars.get(Utils.randomWithRange(0, avatars.size()-1)));
-            LatLng latLng = Utils.getLocation(user.getLat(), user.getLng(), 2);
+            LatLng latLng = Utils.getRandomLocation(new LatLng(user.getLat(), user.getLng()), 2);
             user.setLat(latLng.latitude);
             user.setLng(latLng.longitude);
             user.setAddress(Utils.getAddressFromLatlng(this, latLng.latitude, latLng.longitude));
