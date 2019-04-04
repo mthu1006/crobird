@@ -3,9 +3,11 @@ package com.croteam.crobird;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdCartFragment;
 import com.croteam.crobird.fragment.MainFragment;
 import com.croteam.crobird.fragment.SettingFragment;
+import com.croteam.crobird.model.BirdCart;
 import com.croteam.crobird.model.Category;
 import com.croteam.crobird.model.CommonClass;
 import com.croteam.crobird.model.Rating;
@@ -27,6 +30,10 @@ import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.Prefs;
 import com.croteam.crobird.uitls.Utils;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -37,15 +44,17 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager viewPager;
     private TabLayout tabLayout;
     boolean doubleBackToExitPressedOnce = false;
-    public User user;
+    public static User user;
 
-    public static ArrayList<User> cartList;
+    public static ArrayList<BirdCart> cartList;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        db = FirebaseFirestore.getInstance();
         cartList = new ArrayList<>();
         user = UserHelper.with(this).getUserByPhone(Prefs.with(this).getString(AppConstants.PHONE_NUMBER));
         initCatogories();
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             user.setJob(names[Utils.randomWithRange(0, names.length-1)]);
             user.setPrice(Utils.randomWithRange(5, 30));
             user.setImg(avatars.get(Utils.randomWithRange(0, avatars.size()-1)));
-            LatLng latLng = Utils.getRandomLocation(new LatLng(user.getLat(), user.getLng()), 2);
+            LatLng latLng = Utils.getRandomLocation(new LatLng(this.user.getLat(), this.user.getLng()), Utils.randomWithRange(1, 20)*1000);
             user.setLat(latLng.latitude);
             user.setLng(latLng.longitude);
             user.setAddress(Utils.getAddressFromLatlng(this, latLng.latitude, latLng.longitude));
@@ -120,6 +129,22 @@ public class MainActivity extends AppCompatActivity {
             user.setRating(rate/count);
             String key = user.getName()+"-"+user.getPhone()+"-"+user.getJob();
             user.setSearchKey(key.toLowerCase());
+            db.collection(User.class.getSimpleName())
+                    .add(user.toHashMap())
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(AppConstants.TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(AppConstants.TAG, "Error adding document", e);
+                        }
+                    });
+
+
             RealmController.with(this).getRealm().copyToRealmOrUpdate(user);
 //            list.add(user);
         }

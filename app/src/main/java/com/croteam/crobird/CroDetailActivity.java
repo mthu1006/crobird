@@ -22,9 +22,12 @@ import com.croteam.crobird.adapter.ViewPagerAdapter;
 import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdRatingFragment;
 import com.croteam.crobird.fragment.BirdResumeFragment;
+import com.croteam.crobird.model.BirdCart;
 import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.Validation;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,6 +119,7 @@ public class CroDetailActivity extends AppCompatActivity {
     }
 
     private void initUser(){
+        final Calendar calendar = Calendar.getInstance();
         Log.d(AppConstants.TAG, "getIntent().getStringExtra(User.ID) "+getIntent().getStringExtra(User.ID));
         user = UserHelper.with(this).getUserById(getIntent().getStringExtra(User.ID));
         collapsingToolbarLayout.setTitle(user.getName());
@@ -124,8 +128,9 @@ public class CroDetailActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!MainActivity.cartList.contains(user)) {
-                    MainActivity.cartList.add(user);
+                BirdCart birdCart = new BirdCart(BirdCart.class.getSimpleName()+calendar.getTime(), MainActivity.user.getId(), user.getId(), calendar.getTime());
+                if(!MainActivity.cartList.contains(birdCart)) {
+                    MainActivity.cartList.add(birdCart);
                     Log.d(AppConstants.TAG, "MainActivity.cartList size "+MainActivity.cartList.size());
                     Snackbar snackbar = Snackbar
                             .make(btnAdd, user.getName() + " is added to cart!", Snackbar.LENGTH_LONG);

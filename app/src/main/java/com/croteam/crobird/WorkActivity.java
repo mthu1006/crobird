@@ -32,12 +32,14 @@ import com.croteam.crobird.database.RealmController;
 import com.croteam.crobird.database.UserHelper;
 import com.croteam.crobird.fragment.BirdFragment;
 import com.croteam.crobird.fragment.CroFragment;
+import com.croteam.crobird.model.BirdCart;
 import com.croteam.crobird.model.Category;
 import com.croteam.crobird.model.User;
 import com.croteam.crobird.uitls.AppConstants;
 import com.croteam.crobird.uitls.Validation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -218,9 +220,11 @@ public class WorkActivity extends AppCompatActivity implements RecyclerItemTouch
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        final Calendar calendar = Calendar.getInstance();
+        BirdCart birdCart = new BirdCart(BirdCart.class.getSimpleName()+calendar.getTime(), MainActivity.user.getId(), listSearch.get(position).getId(), calendar.getTime());
         String name = listSearch.get(viewHolder.getAdapterPosition()).getName();
-        if(!MainActivity.cartList.contains(listSearch.get(position))) {
-            MainActivity.cartList.add(listSearch.get(position));
+        if(!MainActivity.cartList.contains(birdCart)) {
+            MainActivity.cartList.add(birdCart);
             Log.d(AppConstants.TAG, "MainActivity.cartList size "+MainActivity.cartList.size());
             Snackbar snackbar = Snackbar
                     .make(rvBird, name + " is added to cart!", Snackbar.LENGTH_LONG);

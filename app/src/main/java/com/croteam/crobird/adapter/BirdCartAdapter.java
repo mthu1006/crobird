@@ -73,7 +73,7 @@ public class BirdCartAdapter extends RecyclerView.Adapter<BirdCartAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
         final BirdCart birdCart = list.get(position);
-        User user = UserHelper.with((MainActivity)context).getUserById(birdCart.getBirđId());
+        User user = UserHelper.with((MainActivity)context).getUserById(birdCart.getBirdId());
         holder.name.setText(user.getName());
         holder.job.setText(user.getJob());
         holder.ratingBar.setRating(user.getRating());
