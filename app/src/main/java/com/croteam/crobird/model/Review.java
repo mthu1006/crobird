@@ -3,7 +3,7 @@ package com.croteam.crobird.model;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Rating extends RealmObject {
+public class Reivew extends RealmObject {
 
     @PrimaryKey
     private String id;

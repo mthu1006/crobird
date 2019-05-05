@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "1014345298556",
+    "firebase_url": "https://crobird.firebaseio.com",
+    "project_id": "crobird",
+    "storage_bucket": "crobird.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014345298556:android:56851df6b65efbbd",
+        "android_client_info": {
+          "package_name": "com.croteam.crobird"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014345298556-p2dmv9ok61or9j4evjen8d3q8r5446ac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.croteam.crobird",
+            "certificate_hash": "edeb078189baac72c1a7740ad91217ee96f6a27d"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQWMdON76Wjy1Z2V-kPf2_NGokVQQGD4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014345298556-othoqufpbchpipv4altimhiqkduceupn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
